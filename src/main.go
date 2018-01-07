@@ -15,26 +15,26 @@ func handle(response http.ResponseWriter, request *http.Request) {
 			return
 		}
 		result := float32(first)
-		operation := int32(request.Form["operation"][0][0])
-		if operation == 32 {
+		operation := rune(request.Form["operation"][0][0])
+		if operation == '+' {		// +
 			result += float32(second)
 		}
-		if operation == 45 {
+		if operation == '-' {		// -
 			result -= float32(second)
 		}
-		if operation == 42 {
+		if operation == '*' {		// *
 			result *= float32(second)
 		}
-		if operation == 47 {
+		if operation == '/' {		// /
 			result /= float32(second)
 		}
-		fmt.Printf("%c %f\n", operation, result)
+		fmt.Printf("[LOG] %f %c %f = %f\n", float32(first), operation, float32(second), result)
 		fmt.Fprintf(response, "%f\n", result)
 	}
 }
 
 func main() {
 	fmt.Println("Starting server at localhost:8080 ...")
-	http.HandleFunc("/", handle)
+	http.HandleFunc("/math", handle)
 	http.ListenAndServe(":8080", nil)
 }
